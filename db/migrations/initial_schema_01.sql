@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS habits (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS habit_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    habit_id INTEGER NOT NULL,
+    executed_at DATE NOT NULL,
+    FOREIGN KEY (habit_id) REFERENCES habits(id),
+    UNIQUE(habit_id, executed_at)
+);
