@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"danilo.marques/vestig/db"
+	"danilo.marques/vestig/internal/infra/db"
 	"github.com/spf13/cobra"
 )
 
