@@ -4,5 +4,7 @@ Keep track of everything you want.
 
 ## TODO
 
-- [X] Configurar conexao com sqlite.
-- [X] Configurar localizacao do arquivo de db
+- [ ] Add list command
+- [ ] Add done command
+- [ ] Add remove command
+- [ ] Add get command
