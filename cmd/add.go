@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"danilo.marques/vestig/internal/infra/db"
 	"danilo.marques/vestig/internal/infra/repository"
 	"danilo.marques/vestig/internal/usecase"
@@ -18,9 +20,12 @@ var addCmd = &cobra.Command{
 		addHabitUseCase := usecase.NewAddHabitUseCase(habitRepository)
 		addHabitInputDTO := usecase.AddHabitInputDTO{Name: habit}
 
-		if err := addHabitUseCase.Execute(&addHabitInputDTO); err != nil {
+		output, err := addHabitUseCase.Execute(&addHabitInputDTO)
+		if err != nil {
 			return err
 		}
+
+		fmt.Printf("✔ Habit '%s' (ID %d) added!\n", output.Name, output.ID)
 
 		return nil
 	},

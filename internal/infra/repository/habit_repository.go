@@ -15,9 +15,15 @@ func NewHabitRepository(db *sql.DB) *HabitRepository {
 
 func (hr *HabitRepository) Save(habit *domain.Habit) error {
 	query := `insert into habits(name, done, created_at) values (?, ?, ?)`
-	if _, err := hr.db.Exec(query, habit.Name, habit.Done, habit.CreatedAt); err != nil {
+	result, err := hr.db.Exec(query, habit.Name, habit.Done, habit.CreatedAt)
+	if err != nil {
+		return err
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
 		return err
 	}
 
+	habit.ID = id
 	return nil
 }
