@@ -10,7 +10,7 @@ type Habit struct {
 	ID        int64
 	Name      string
 	CreatedAt time.Time
-	Done      bool
+	IsActive  bool
 }
 
 var ErrEmptyHabitName = errors.New("Habit name cannot be empty")
@@ -23,7 +23,7 @@ func NewHabit(name string) (*Habit, error) {
 
 	return &Habit{
 		Name:      trimmedName,
-		Done:      false,
+		IsActive:  false,
 		CreatedAt: time.Now(),
 	}, nil
 }
