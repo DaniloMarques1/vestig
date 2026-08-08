@@ -36,7 +36,9 @@ func InitDB(dbpath string) error {
 }
 
 func Close() {
-	if err := DB.Close(); err != nil {
-		log.Fatal(err)
+	if DB != nil {
+		if err := DB.Close(); err != nil {
+			log.Fatal(err)
+		}
 	}
 }

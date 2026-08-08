@@ -28,9 +28,17 @@ func (hr *habitRepository) Save(habit *domain.Habit) error {
 	return nil
 }
 
-func (hr *habitRepository) List() ([]domain.Habit, error) {
-	query := `select id, name, is_active, created_at from habits order by created_at desc`
-	rows, err := hr.db.Query(query)
+func (hr *habitRepository) List(showAll bool) ([]domain.Habit, error) {
+	query := `select id, name, is_active, created_at
+	from habits`
+	var args []interface{}
+	if !showAll {
+		query += ` where is_active = ?`
+		args = append(args, showAll)
+	}
+	query += ` order by created_at desc`
+
+	rows, err := hr.db.Query(query, args...)
 	if err != nil {
 		return nil, err
 	}

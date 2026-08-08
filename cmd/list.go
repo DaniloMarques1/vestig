@@ -9,6 +9,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var showAll bool
+
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "Lista todos os hábitos e o status do dia",
@@ -16,7 +18,8 @@ var listCmd = &cobra.Command{
 		repository := repository.NewHabitRepository(db.DB)
 		listHabitsUseCase := usecase.NewListHabitUseCase(repository)
 
-		output, err := listHabitsUseCase.Execute()
+		input := usecase.ListHabitInputDTO{ShowAll: showAll}
+		output, err := listHabitsUseCase.Execute(input)
 		if err != nil {
 			return err
 		}
@@ -43,4 +46,5 @@ var listCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(listCmd)
+	listCmd.Flags().BoolVarP(&showAll, "all", "a", false, "Include finished habits")
 }

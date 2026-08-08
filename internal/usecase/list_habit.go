@@ -12,6 +12,10 @@ func NewListHabitUseCase(repository domain.HabitRepository) *ListHabitUseCase {
 	return &ListHabitUseCase{repository}
 }
 
+type ListHabitInputDTO struct {
+	ShowAll bool
+}
+
 type ListHabitOutputDTO struct {
 	Habits []HabitDTO
 }
@@ -22,8 +26,8 @@ type HabitDTO struct {
 	IsActive bool
 }
 
-func (lh *ListHabitUseCase) Execute() (*ListHabitOutputDTO, error) {
-	habits, err := lh.repository.List()
+func (lh *ListHabitUseCase) Execute(input ListHabitInputDTO) (*ListHabitOutputDTO, error) {
+	habits, err := lh.repository.List(input.ShowAll)
 	if err != nil {
 		return nil, err
 	}
