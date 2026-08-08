@@ -17,7 +17,7 @@ var ErrEmptyHabitName = errors.New("Habit name cannot be empty")
 
 func NewHabit(name string) (*Habit, error) {
 	trimmedName := strings.TrimSpace(name)
-	if name == "" {
+	if trimmedName == "" {
 		return nil, ErrEmptyHabitName
 	}
 

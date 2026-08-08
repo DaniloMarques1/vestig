@@ -19,26 +19,23 @@ var (
 
 func InitDB(dbpath string) error {
 	var err error
-	// TODO: maybe remove the once.Do() since this should be called only once always
-	once.Do(func() {
-		DB, err = sql.Open("sqlite3", dbpath)
-		if err != nil {
-			return
-		}
+	DB, err = sql.Open("sqlite3", dbpath)
+	if err != nil {
+		return err
+	}
 
-		if err = DB.Ping(); err != nil {
-			return
-		}
+	if err = DB.Ping(); err != nil {
+		return err
+	}
 
-		if _, err = DB.Exec(schemaSQL); err != nil {
-			return
-		}
-	})
+	if _, err = DB.Exec(schemaSQL); err != nil {
+		return err
+	}
 
-	return err
+	return nil
 }
 
-func close() {
+func Close() {
 	if err := DB.Close(); err != nil {
 		log.Fatal(err)
 	}
