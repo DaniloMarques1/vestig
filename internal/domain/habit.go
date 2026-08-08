@@ -23,7 +23,7 @@ func NewHabit(name string) (*Habit, error) {
 
 	return &Habit{
 		Name:      trimmedName,
-		IsActive:  false,
+		IsActive:  true,
 		CreatedAt: time.Now(),
 	}, nil
 }

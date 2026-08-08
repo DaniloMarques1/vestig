@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS habits (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    is_active BOOLEAN DEFAULT false,
+    is_active BOOLEAN DEFAULT true,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
