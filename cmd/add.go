@@ -14,6 +14,7 @@ var addCmd = &cobra.Command{
 	Short: "Cadastra um novo hábito",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		// TODO: fix it to grab it all
 		habit := args[0]
 
 		habitRepository := repository.NewHabitRepository(db.DB)

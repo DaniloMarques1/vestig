@@ -59,3 +59,25 @@ func (hr *habitRepository) List(showAll bool) ([]domain.Habit, error) {
 
 	return habits, nil
 }
+
+func (hr *habitRepository) FindById(id int64) (*domain.Habit, error) {
+	query := `
+		select id, name, is_active, created_at
+		from habits
+		where id = ?
+	`
+	var args []interface{}
+	args = append(args, id)
+
+	var habit domain.Habit
+	err := hr.db.QueryRow(query, args...).Scan(&habit.ID, &habit.Name, &habit.IsActive, &habit.CreatedAt)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, domain.ErrHabitNotFound
+		}
+
+		return nil, err
+	}
+
+	return &habit, nil
+}
