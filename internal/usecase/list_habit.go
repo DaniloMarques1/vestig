@@ -27,7 +27,8 @@ type HabitDTO struct {
 }
 
 func (lh *ListHabitUseCase) Execute(input ListHabitInputDTO) (*ListHabitOutputDTO, error) {
-	habits, err := lh.repository.List(input.ShowAll)
+	isActive := !input.ShowAll
+	habits, err := lh.repository.List(isActive)
 	if err != nil {
 		return nil, err
 	}
