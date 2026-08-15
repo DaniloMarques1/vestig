@@ -28,13 +28,27 @@ func (hr *habitRepository) Save(habit *domain.Habit) error {
 	return nil
 }
 
-func (hr *habitRepository) List(showAll bool) ([]domain.Habit, error) {
+func (hr *habitRepository) Update(habit *domain.Habit) error {
+	query := `update habits
+	set name = ?,
+	is_active = ?
+	where id = ?
+	`
+	_, err := hr.db.Exec(query, habit.Name, habit.IsActive, habit.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (hr *habitRepository) List(isActive bool) ([]domain.Habit, error) {
 	query := `select id, name, is_active, created_at
 	from habits`
 	var args []interface{}
-	if !showAll {
+	if isActive {
 		query += ` where is_active = ?`
-		args = append(args, showAll)
+		args = append(args, isActive)
 	}
 	query += ` order by created_at`
 

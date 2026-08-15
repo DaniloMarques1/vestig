@@ -30,3 +30,7 @@ func NewHabit(name string) (*Habit, error) {
 		CreatedAt: time.Now(),
 	}, nil
 }
+
+func (h *Habit) MarkAsInactive() {
+	h.IsActive = false
+}
