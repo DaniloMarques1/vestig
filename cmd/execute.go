@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 	"time"
@@ -25,12 +26,14 @@ var doneCmd = &cobra.Command{
 		habitRepository := repository.NewHabitRepository(db.DB)
 		habitLogRepository := repository.NewHabitLogRepository(db.DB)
 		executeHabitUseCase := usecase.NewExecuteHabitUseCase(habitRepository, habitLogRepository)
-		executeHabitInputDTO := usecase.ExecuteHabitInputDTO{ID: ID, ExecutedAt: time.Now()}
+		input := usecase.ExecuteHabitInputDTO{ID: ID, ExecutedAt: time.Now()}
 
-		if err := executeHabitUseCase.Execute(executeHabitInputDTO); err != nil {
+		output, err := executeHabitUseCase.Execute(input)
+		if err != nil {
 			log.Fatal(err)
 		}
 
+		fmt.Printf("\033[32m✔\033[0m Hábito '%s' marcado como concluído hoje!\n", output.HabitName)
 		return nil
 	},
 }

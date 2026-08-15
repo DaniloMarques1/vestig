@@ -20,16 +20,21 @@ type ExecuteHabitInputDTO struct {
 	ExecutedAt time.Time
 }
 
-func (e *ExecuteHabitUseCase) Execute(input ExecuteHabitInputDTO) error {
+type ExecuteHabitOutputDTO struct {
+	HabitName string
+}
+
+func (e *ExecuteHabitUseCase) Execute(input ExecuteHabitInputDTO) (*ExecuteHabitOutputDTO, error) {
 	habit, err := e.habitRepository.FindById(input.ID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	habitLog := domain.NewHabitLog(habit.ID, input.ExecutedAt)
 	if err := e.habitLogRepository.Save(habitLog); err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	output := &ExecuteHabitOutputDTO{HabitName: habit.Name}
+	return output, nil
 }
