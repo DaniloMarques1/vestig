@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"danilo.marques/vestig/internal/infra/db"
 	"danilo.marques/vestig/internal/infra/repository"
@@ -14,9 +15,8 @@ var addCmd = &cobra.Command{
 	Short: "Cadastra um novo hábito",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		// TODO: fix it to grab it all
-		habit := args[0]
-
+		allArgs := args[0:]
+		habit := strings.Join(allArgs, " ")
 		habitRepository := repository.NewHabitRepository(db.DB)
 		addHabitUseCase := usecase.NewAddHabitUseCase(habitRepository)
 		addHabitInputDTO := usecase.AddHabitInputDTO{Name: habit}
