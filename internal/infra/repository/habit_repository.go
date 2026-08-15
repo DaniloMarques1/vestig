@@ -36,7 +36,7 @@ func (hr *habitRepository) List(showAll bool) ([]domain.Habit, error) {
 		query += ` where is_active = ?`
 		args = append(args, showAll)
 	}
-	query += ` order by created_at desc`
+	query += ` order by created_at`
 
 	rows, err := hr.db.Query(query, args...)
 	if err != nil {
