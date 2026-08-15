@@ -12,8 +12,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var doneCmd = &cobra.Command{
-	Use:   "done [id do hábito]",
+var executeCmd = &cobra.Command{
+	Use:   "execute [id do hábito]",
 	Short: "Marca a execução de um hábito",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -39,5 +39,5 @@ var doneCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(doneCmd)
+	rootCmd.AddCommand(executeCmd)
 }
