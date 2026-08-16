@@ -9,4 +9,5 @@ type HabitRepository interface {
 
 type HabitLogRepository interface {
 	Save(*HabitLog) error
+	Find(int64) ([]HabitLog, error)
 }

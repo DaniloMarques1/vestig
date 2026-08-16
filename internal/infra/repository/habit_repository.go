@@ -42,6 +42,7 @@ func (hr *habitRepository) Update(habit *domain.Habit) error {
 	return nil
 }
 
+// TODO: change its name to Find
 func (hr *habitRepository) List(isActive bool) ([]domain.Habit, error) {
 	query := `select id, name, is_active, created_at
 	from habits`
