@@ -7,23 +7,9 @@ import (
 	"danilo.marques/vestig/internal/domain"
 )
 
-// manualMockRepository é a implementação manual do domain.HabitRepository
-type manualMockRepository struct {
-	saveFn func(h *domain.Habit) error
-	called bool
-}
-
-func (m *manualMockRepository) Save(h *domain.Habit) error {
-	m.called = true
-	if m.saveFn != nil {
-		return m.saveFn(h)
-	}
-	return nil
-}
-
 func TestAddHabitUseCase_Execute(t *testing.T) {
 	t.Run("deve criar um hábito com sucesso", func(t *testing.T) {
-		repo := &manualMockRepository{
+		repo := &mockHabitRepository{
 			saveFn: func(h *domain.Habit) error {
 				if h.Name != "Beber Água" {
 					t.Errorf("esperava nome 'Beber Água', recebeu '%s'", h.Name)
@@ -61,7 +47,7 @@ func TestAddHabitUseCase_Execute(t *testing.T) {
 	})
 
 	t.Run("deve retornar erro quando o nome for vazio", func(t *testing.T) {
-		repo := &manualMockRepository{}
+		repo := &mockHabitRepository{}
 		uc := NewAddHabitUseCase(repo)
 
 		input := &AddHabitInputDTO{Name: "   "}
@@ -84,7 +70,7 @@ func TestAddHabitUseCase_Execute(t *testing.T) {
 	t.Run("deve retornar erro quando falhar ao salvar no repositório", func(t *testing.T) {
 		errDb := errors.New("falha de conexão com o banco")
 
-		repo := &manualMockRepository{
+		repo := &mockHabitRepository{
 			saveFn: func(h *domain.Habit) error {
 				return errDb
 			},

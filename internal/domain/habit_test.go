@@ -26,8 +26,8 @@ func TestNewHabit(t *testing.T) {
 			t.Errorf("esperava nome 'Meditar', recebeu '%s'", habit.Name)
 		}
 
-		if habit.IsActive != false {
-			t.Errorf("esperava IsActive false, recebeu %t", habit.IsActive)
+		if habit.IsActive != true {
+			t.Errorf("esperava IsActive true, recebeu %t", habit.IsActive)
 		}
 
 		if habit.ID != 0 {
