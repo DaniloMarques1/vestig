@@ -28,6 +28,10 @@ func InitDB(dbpath string) error {
 		return err
 	}
 
+	if _, err := DB.Exec("PRAGMA foreign_keys = ON"); err != nil {
+		return err
+	}
+
 	if _, err = DB.Exec(schemaSQL); err != nil {
 		return err
 	}
