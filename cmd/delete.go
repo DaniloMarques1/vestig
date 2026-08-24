@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
 	"strconv"
 
 	"danilo.marques/vestig/internal/infra/db"
@@ -17,7 +17,7 @@ var DeleteCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ID, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(err) // TODO: message explaining id should be a number
+			return fmt.Errorf("Error deleting habit %v", ID)
 		}
 
 		habitRepository := repository.NewHabitRepository(db.DB)
@@ -26,7 +26,7 @@ var DeleteCmd = &cobra.Command{
 
 		_, err = deleteHabitUseCase.Execute(input)
 		if err != nil {
-			log.Fatal(err)
+			return fmt.Errorf("Error deleting habit %v. Error %v", ID, err)
 		}
 		// TODO: print something nice
 

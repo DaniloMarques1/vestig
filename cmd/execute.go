@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"time"
 
@@ -20,7 +19,7 @@ var executeCmd = &cobra.Command{
 		argumentId := args[0]
 		ID, err := strconv.ParseInt(argumentId, 10, 64)
 		if err != nil {
-			log.Fatal(err) // TODO: message explaining id should be a number
+			return fmt.Errorf("Error executing habit %v %v", ID)
 		}
 
 		habitRepository := repository.NewHabitRepository(db.DB)
@@ -30,7 +29,7 @@ var executeCmd = &cobra.Command{
 
 		output, err := executeHabitUseCase.Execute(input)
 		if err != nil {
-			log.Fatal(err)
+			return fmt.Errorf("Error executing habit %v. Error: %v", ID, err)
 		}
 
 		fmt.Printf("\033[32m✔\033[0m Hábito '%s' marcado como concluído hoje!\n", output.HabitName)

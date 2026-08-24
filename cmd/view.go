@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -20,7 +19,7 @@ var viewCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ID, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(err) // TODO
+			return fmt.Errorf("Error viewing habit %v", ID)
 		}
 		habitRepository := repository.NewHabitRepository(db.DB)
 		habitLogRepository := repository.NewHabitLogRepository(db.DB)
@@ -28,7 +27,7 @@ var viewCmd = &cobra.Command{
 		viewHabitUseCase := usecase.NewViewHabitUseCase(habitRepository, habitLogRepository)
 		output, err := viewHabitUseCase.Execute(input)
 		if err != nil {
-			log.Fatal(err)
+			return fmt.Errorf("Error viewing habit %v. Error %v", ID, err)
 		}
 
 		fmt.Println(RenderHabitsExecution(output, time.Now()))
