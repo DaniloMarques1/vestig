@@ -8,13 +8,13 @@ import (
 )
 
 func TestAddHabitUseCase_Execute(t *testing.T) {
-	t.Run("deve criar um hábito com sucesso", func(t *testing.T) {
+	t.Run("should create a habit successfully", func(t *testing.T) {
 		repo := &mockHabitRepository{
 			saveFn: func(h *domain.Habit) error {
 				if h.Name != "Beber Água" {
-					t.Errorf("esperava nome 'Beber Água', recebeu '%s'", h.Name)
+					t.Errorf("expected name 'Beber Água', got '%s'", h.Name)
 				}
-				// Simula o banco gerando o ID no struct
+				// Simulates DB generating ID in struct
 				h.ID = 1
 				return nil
 			},
@@ -26,27 +26,27 @@ func TestAddHabitUseCase_Execute(t *testing.T) {
 		output, err := uc.Execute(input)
 
 		if err != nil {
-			t.Fatalf("esperava erro nil, recebeu: %v", err)
+			t.Fatalf("expected nil error, got: %v", err)
 		}
 
 		if !repo.called {
-			t.Error("esperava que o repositório tivesse sido chamado")
+			t.Error("expected repository to have been called")
 		}
 
 		if output == nil {
-			t.Fatal("output não deveria ser nil")
+			t.Fatal("output should not be nil")
 		}
 
 		if output.ID != 1 {
-			t.Errorf("esperava ID 1, recebeu %d", output.ID)
+			t.Errorf("expected ID 1, got %d", output.ID)
 		}
 
 		if output.Name != "Beber Água" {
-			t.Errorf("esperava nome 'Beber Água', recebeu '%s'", output.Name)
+			t.Errorf("expected name 'Beber Água', got '%s'", output.Name)
 		}
 	})
 
-	t.Run("deve retornar erro quando o nome for vazio", func(t *testing.T) {
+	t.Run("should return an error when habit name is empty", func(t *testing.T) {
 		repo := &mockHabitRepository{}
 		uc := NewAddHabitUseCase(repo)
 
@@ -55,20 +55,20 @@ func TestAddHabitUseCase_Execute(t *testing.T) {
 		output, err := uc.Execute(input)
 
 		if !errors.Is(err, domain.ErrEmptyHabitName) {
-			t.Errorf("esperava erro ErrEmptyHabitName, recebeu: %v", err)
+			t.Errorf("expected error ErrEmptyHabitName, got: %v", err)
 		}
 
 		if output != nil {
-			t.Errorf("esperava output nil, recebeu: %+v", output)
+			t.Errorf("expected nil output, got: %+v", output)
 		}
 
 		if repo.called {
-			t.Error("repositório não deveria ter sido chamado quando a validação falha")
+			t.Error("repository should not have been called when validation fails")
 		}
 	})
 
-	t.Run("deve retornar erro quando falhar ao salvar no repositório", func(t *testing.T) {
-		errDb := errors.New("falha de conexão com o banco")
+	t.Run("should return an error when repository fails to save", func(t *testing.T) {
+		errDb := errors.New("database connection failure")
 
 		repo := &mockHabitRepository{
 			saveFn: func(h *domain.Habit) error {
@@ -82,15 +82,15 @@ func TestAddHabitUseCase_Execute(t *testing.T) {
 		output, err := uc.Execute(input)
 
 		if !errors.Is(err, errDb) {
-			t.Errorf("esperava erro '%v', recebeu: '%v'", errDb, err)
+			t.Errorf("expected error '%v', got: '%v'", errDb, err)
 		}
 
 		if output != nil {
-			t.Errorf("esperava output nil, recebeu: %+v", output)
+			t.Errorf("expected nil output, got: %+v", output)
 		}
 
 		if !repo.called {
-			t.Error("esperava que o repositório tivesse sido chamado")
+			t.Error("expected repository to have been called")
 		}
 	})
 }

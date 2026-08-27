@@ -7,7 +7,7 @@ import (
 )
 
 func TestNewHabit(t *testing.T) {
-	t.Run("deve criar um hábito válido com os valores padrão corretos", func(t *testing.T) {
+	t.Run("should create a valid habit with correct default values", func(t *testing.T) {
 		before := time.Now()
 
 		habit, err := NewHabit("Meditar")
@@ -15,64 +15,63 @@ func TestNewHabit(t *testing.T) {
 		after := time.Now()
 
 		if err != nil {
-			t.Fatalf("esperava erro nil, recebeu: %v", err)
+			t.Fatalf("expected nil error, got: %v", err)
 		}
 
 		if habit == nil {
-			t.Fatal("habito não deveria ser nil")
+			t.Fatal("habit should not be nil")
 		}
 
 		if habit.Name != "Meditar" {
-			t.Errorf("esperava nome 'Meditar', recebeu '%s'", habit.Name)
+			t.Errorf("expected name 'Meditar', got '%s'", habit.Name)
 		}
 
 		if habit.IsActive != true {
-			t.Errorf("esperava IsActive true, recebeu %t", habit.IsActive)
+			t.Errorf("expected IsActive true, got %t", habit.IsActive)
 		}
 
 		if habit.ID != 0 {
-			t.Errorf("esperava ID inicial 0, recebeu %d", habit.ID)
+			t.Errorf("expected initial ID 0, got %d", habit.ID)
 		}
 
-		// Valida se o CreatedAt foi preenchido com o momento atual da criação
 		if habit.CreatedAt.Before(before) || habit.CreatedAt.After(after) {
-			t.Errorf("CreatedAt %v fora do intervalo esperado [%v, %v]", habit.CreatedAt, before, after)
+			t.Errorf("CreatedAt %v outside expected range [%v, %v]", habit.CreatedAt, before, after)
 		}
 	})
 
-	t.Run("deve remover espaços em branco nas extremidades do nome", func(t *testing.T) {
+	t.Run("should trim leading and trailing whitespaces from name", func(t *testing.T) {
 		habit, err := NewHabit("   Correr no parque   ")
 
 		if err != nil {
-			t.Fatalf("esperava erro nil, recebeu: %v", err)
+			t.Fatalf("expected nil error, got: %v", err)
 		}
 
 		if habit.Name != "Correr no parque" {
-			t.Errorf("esperava nome 'Correr no parque', recebeu '%s'", habit.Name)
+			t.Errorf("expected name 'Correr no parque', got '%s'", habit.Name)
 		}
 	})
 
-	t.Run("deve retornar ErrEmptyHabitName quando o nome for string vazia", func(t *testing.T) {
+	t.Run("should return ErrEmptyHabitName when name is an empty string", func(t *testing.T) {
 		habit, err := NewHabit("")
 
 		if !errors.Is(err, ErrEmptyHabitName) {
-			t.Errorf("esperava erro ErrEmptyHabitName, recebeu: %v", err)
+			t.Errorf("expected error ErrEmptyHabitName, got: %v", err)
 		}
 
 		if habit != nil {
-			t.Errorf("esperava hábito nil ao falhar a criação, recebeu: %+v", habit)
+			t.Errorf("expected nil habit on creation failure, got: %+v", habit)
 		}
 	})
 
-	t.Run("deve retornar ErrEmptyHabitName quando o nome contiver apenas espaços", func(t *testing.T) {
+	t.Run("should return ErrEmptyHabitName when name contains only whitespaces", func(t *testing.T) {
 		habit, err := NewHabit("     ")
 
 		if !errors.Is(err, ErrEmptyHabitName) {
-			t.Errorf("esperava erro ErrEmptyHabitName, recebeu: %v", err)
+			t.Errorf("expected error ErrEmptyHabitName, got: %v", err)
 		}
 
 		if habit != nil {
-			t.Errorf("esperava hábito nil ao falhar a criação, recebeu: %+v", habit)
+			t.Errorf("expected nil habit on creation failure, got: %+v", habit)
 		}
 	})
 }

@@ -7,8 +7,9 @@ import (
 )
 
 var (
-	ErrHabitNotFound  = errors.New("Habit not found")
-	ErrEmptyHabitName = errors.New("Habit name cannot be empty")
+	ErrHabitNotFound        = errors.New("Habit not found")
+	ErrEmptyHabitName       = errors.New("Habit name cannot be empty")
+	ErrHabitAlreadyExecuted = errors.New("Habit already executed today")
 )
 
 type Habit struct {
