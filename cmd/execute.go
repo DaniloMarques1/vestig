@@ -19,7 +19,7 @@ var executeCmd = &cobra.Command{
 		argumentId := args[0]
 		ID, err := strconv.ParseInt(argumentId, 10, 64)
 		if err != nil {
-			return fmt.Errorf("Error executing habit %v %v", ID)
+			return fmt.Errorf("Error executing habit %v", ID)
 		}
 
 		habitRepository := repository.NewHabitRepository(db.DB)

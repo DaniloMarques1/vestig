@@ -38,8 +38,7 @@ var viewCmd = &cobra.Command{
 func RenderHabitsExecution(output *usecase.ViewHabitUseCaseOutputDTO, now time.Time) string {
 	var sb strings.Builder
 
-	// TODO: fix dias, it depends on streak value
-	sb.WriteString(fmt.Sprintf("%s (#%d) — 🔥 %d dias seguidos\n\n", output.HabitName, output.HabitID, output.Streak))
+	sb.WriteString(fmt.Sprintf("%s (#%d) — 🔥 %d %s seguidos\n\n", output.HabitName, output.HabitID, output.Streak, getDaysLabel(output.Streak)))
 
 	executionsMap := make(map[string]bool)
 	lastIdx := len(output.Executions) - 1
@@ -66,6 +65,14 @@ func RenderHabitsExecution(output *usecase.ViewHabitUseCaseOutputDTO, now time.T
 	sb.WriteString(strings.Join(statuses, "  ") + "\n")
 
 	return sb.String()
+}
+
+func getDaysLabel(streak int64) string {
+	if streak == 1 {
+		return "dia"
+	}
+
+	return "dias"
 }
 
 func convertWeekToPT(week string) string {

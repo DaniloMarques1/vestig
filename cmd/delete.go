@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var DeleteCmd = &cobra.Command{
+var deleteCmd = &cobra.Command{
 	Use:   "delete [id do habito]",
 	Short: "Remove um hábito criado anteriormente",
 	Args:  cobra.MinimumNArgs(1),
@@ -35,5 +35,5 @@ var DeleteCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(DeleteCmd)
+	rootCmd.AddCommand(deleteCmd)
 }
