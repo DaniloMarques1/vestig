@@ -28,7 +28,6 @@ var listCmd = &cobra.Command{
 			fmt.Println("No habits tracked yet. Run 'vestig add <name>' to get started")
 			return nil
 		}
-		// Cabeçalho da tabela
 		fmt.Printf("%-4s | %-25s | %-6s\n", "ID", "Habit", "Active")
 		fmt.Println("-----+---------------------------+--------")
 
