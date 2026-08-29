@@ -11,8 +11,8 @@ import (
 )
 
 var addCmd = &cobra.Command{
-	Use:   "add [nome do hábito]",
-	Short: "Cadastra um novo hábito",
+	Use:   "add [Habit name]",
+	Short: "Adds a new habit",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		allArgs := args[0:]

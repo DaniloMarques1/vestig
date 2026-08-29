@@ -15,8 +15,8 @@ import (
 var executedDate string
 
 var executeCmd = &cobra.Command{
-	Use:   "execute [id do hábito]",
-	Short: "Marca a execução de um hábito",
+	Use:   "execute [Habit id]",
+	Short: "Record a habit execution",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		argumentId := args[0]
@@ -40,12 +40,10 @@ var executeCmd = &cobra.Command{
 			return fmt.Errorf("Error executing habit %v. Error: %v", ID, err)
 		}
 
-		fmt.Printf("\033[32m✔\033[0m Hábito '%s' marcado como concluído para o dia %v!\n", output.HabitName, getDateAsPTBR(output.ExecutedAt))
+		fmt.Printf("\033[32m✔\033[0m Habit '%s' marked as executed for today %v!\n", output.HabitName, getDateAsPTBR(output.ExecutedAt))
 		return nil
 	},
 }
-
-const layoutBR = "02/01/2006"
 
 func getExecutedDate(executedDate string) (time.Time, error) {
 	if len(executedDate) == 0 {
@@ -54,7 +52,7 @@ func getExecutedDate(executedDate string) (time.Time, error) {
 
 	t, err := time.ParseInLocation(layoutBR, executedDate, time.Local)
 	if err != nil {
-		return time.Time{}, errors.New("Formato invalido de data. Data precisa ter esse padrao 27/03/2006")
+		return time.Time{}, errors.New("Invalid date format. Expected format: DD/MM/YYYY (e.g., 27/03/2006)")
 	}
 
 	return t, nil

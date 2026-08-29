@@ -11,8 +11,8 @@ import (
 )
 
 var deleteCmd = &cobra.Command{
-	Use:   "delete [id do habito]",
-	Short: "Remove um hábito criado anteriormente",
+	Use:   "delete [Habit id]",
+	Short: "Remove a previously created habit",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ID, err := strconv.ParseInt(args[0], 10, 64)
@@ -24,11 +24,12 @@ var deleteCmd = &cobra.Command{
 		deleteHabitUseCase := usecase.NewDeleteHabitUseCase(habitRepository)
 		input := usecase.DeleteHabitUseCaseInputDTO{HabitID: ID}
 
-		_, err = deleteHabitUseCase.Execute(input)
+		output, err := deleteHabitUseCase.Execute(input)
 		if err != nil {
 			return fmt.Errorf("Error deleting habit %v. Error %v", ID, err)
 		}
-		// TODO: print something nice
+
+		fmt.Printf("\033[32m✔\033[0m Habit '%s' removed!\n", output.HabitName)
 
 		return nil
 	},

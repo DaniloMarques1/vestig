@@ -9,6 +9,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const layoutBR = "02/01/2006"
+
 var rootCmd = &cobra.Command{
 	Use:   "vestig",
 	Short: "Vestig - Gerenciador de hábitos e rastros diários via terminal",

@@ -13,8 +13,8 @@ import (
 )
 
 var viewCmd = &cobra.Command{
-	Use:   "view [id do habito]",
-	Short: "Lista todos os hábitos e o status do dia",
+	Use:   "view [Habit id]",
+	Short: "View habit details",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ID, err := strconv.ParseInt(args[0], 10, 64)
@@ -38,7 +38,12 @@ var viewCmd = &cobra.Command{
 func RenderHabitsExecution(output *usecase.ViewHabitUseCaseOutputDTO, now time.Time) string {
 	var sb strings.Builder
 
-	sb.WriteString(fmt.Sprintf("%s (#%d) — 🔥 %d %s seguidos\n\n", output.HabitName, output.HabitID, output.Streak, getDaysLabel(output.Streak)))
+	sb.WriteString(fmt.Sprintf("%s (#%d) — 🔥 %d-%s streak\n\n",
+		output.HabitName,
+		output.HabitID,
+		output.Streak,
+		getDaysLabel(output.Streak),
+	))
 
 	executionsMap := make(map[string]bool)
 	lastIdx := len(output.Executions) - 1
@@ -46,7 +51,7 @@ func RenderHabitsExecution(output *usecase.ViewHabitUseCaseOutputDTO, now time.T
 		if len(executionsMap) == 7 {
 			break
 		}
-		dt := output.Executions[i].Format("02/01/2006")
+		dt := output.Executions[i].Format(layoutBR)
 		executionsMap[dt] = true
 	}
 	var headers, statuses []string
@@ -54,7 +59,7 @@ func RenderHabitsExecution(output *usecase.ViewHabitUseCaseOutputDTO, now time.T
 		day := now.AddDate(0, 0, -i)
 		ptWeekDay := convertWeekToPT(day.Weekday().String())
 		headers = append(headers, fmt.Sprintf("%-3s", ptWeekDay))
-		if _, exists := executionsMap[day.Format("02/01/2006")]; exists {
+		if _, exists := executionsMap[day.Format(layoutBR)]; exists {
 			statuses = append(statuses, " ✔ ")
 		} else {
 			statuses = append(statuses, " ✘ ")
@@ -69,31 +74,17 @@ func RenderHabitsExecution(output *usecase.ViewHabitUseCaseOutputDTO, now time.T
 
 func getDaysLabel(streak int64) string {
 	if streak == 1 {
-		return "dia"
+		return "day"
 	}
 
-	return "dias"
+	return "days"
 }
 
 func convertWeekToPT(week string) string {
-	switch week {
-	case "Monday":
-		return "Seg"
-	case "Tuesday":
-		return "Ter"
-	case "Wednesday":
-		return "Qua"
-	case "Thursday":
-		return "Qui"
-	case "Friday":
-		return "Sex"
-	case "Saturday":
-		return "Sab"
-	case "Sunday":
-		return "Dom"
-	default:
-		return week
+	if len(week) > 3 {
+		return week[:3]
 	}
+	return week
 }
 
 func init() {
