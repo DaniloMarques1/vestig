@@ -29,7 +29,7 @@ var listCmd = &cobra.Command{
 			return nil
 		}
 		// Cabeçalho da tabela
-		fmt.Printf("%-4s | %-25s | %-6s\n", "ID", "Hábito", "Ativo")
+		fmt.Printf("%-4s | %-25s | %-6s\n", "ID", "Habit", "Active")
 		fmt.Println("-----+---------------------------+--------")
 
 		for _, h := range output.Habits {
