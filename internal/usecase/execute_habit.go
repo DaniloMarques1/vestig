@@ -21,7 +21,8 @@ type ExecuteHabitInputDTO struct {
 }
 
 type ExecuteHabitOutputDTO struct {
-	HabitName string
+	HabitName  string
+	ExecutedAt time.Time
 }
 
 func (e *ExecuteHabitUseCase) Execute(input ExecuteHabitInputDTO) (*ExecuteHabitOutputDTO, error) {
@@ -30,7 +31,7 @@ func (e *ExecuteHabitUseCase) Execute(input ExecuteHabitInputDTO) (*ExecuteHabit
 		return nil, err
 	}
 
-	executionExists, err := e.hasExecutedAtDate(input.ExecutedAt)
+	executionExists, err := e.hasExecutedAtDate(habit.ID, input.ExecutedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -43,12 +44,12 @@ func (e *ExecuteHabitUseCase) Execute(input ExecuteHabitInputDTO) (*ExecuteHabit
 		return nil, err
 	}
 
-	output := &ExecuteHabitOutputDTO{HabitName: habit.Name}
+	output := &ExecuteHabitOutputDTO{HabitName: habit.Name, ExecutedAt: habitLog.ExecutedAt}
 	return output, nil
 }
 
-func (e *ExecuteHabitUseCase) hasExecutedAtDate(dt time.Time) (bool, error) {
-	executionExists, err := e.habitLogRepository.FindExecutionAt(dt)
+func (e *ExecuteHabitUseCase) hasExecutedAtDate(habitID int64, dt time.Time) (bool, error) {
+	executionExists, err := e.habitLogRepository.FindExecutionAt(habitID, dt)
 	if err != nil {
 		return false, err
 	}

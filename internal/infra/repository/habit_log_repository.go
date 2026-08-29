@@ -1,9 +1,10 @@
 package repository
 
 import (
-	"danilo.marques/vestig/internal/domain"
 	"database/sql"
 	"time"
+
+	"danilo.marques/vestig/internal/domain"
 )
 
 type habitLogRepository struct {
@@ -55,7 +56,7 @@ func (r *habitLogRepository) Find(habitID int64) ([]domain.HabitLog, error) {
 	return logs, nil
 }
 
-func (r *habitLogRepository) FindExecutionAt(dt time.Time) (bool, error) {
+func (r *habitLogRepository) FindExecutionAt(habitID int64, dt time.Time) (bool, error) {
 	startOfDay := time.Date(dt.Year(), dt.Month(), dt.Day(), 0, 0, 0, 0, dt.Location())
 	endOfDay := startOfDay.AddDate(0, 0, 1)
 
@@ -64,11 +65,12 @@ func (r *habitLogRepository) FindExecutionAt(dt time.Time) (bool, error) {
 			SELECT 1
 			FROM habit_logs
 			WHERE executed_at >= ? AND executed_at < ?
+			and habit_id = ?
 		)
 	`
 
 	var executionExists bool
-	if err := r.db.QueryRow(query, startOfDay, endOfDay).Scan(&executionExists); err != nil {
+	if err := r.db.QueryRow(query, startOfDay, endOfDay, habitID).Scan(&executionExists); err != nil {
 		return false, err
 	}
 

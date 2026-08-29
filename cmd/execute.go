@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -10,6 +11,8 @@ import (
 	"danilo.marques/vestig/internal/usecase"
 	"github.com/spf13/cobra"
 )
+
+var executedDate string
 
 var executeCmd = &cobra.Command{
 	Use:   "execute [id do hábito]",
@@ -22,21 +25,46 @@ var executeCmd = &cobra.Command{
 			return fmt.Errorf("Error executing habit %v", ID)
 		}
 
+		executedAt, err := getExecutedDate(executedDate)
+		if err != nil {
+			return err
+		}
+
 		habitRepository := repository.NewHabitRepository(db.DB)
 		habitLogRepository := repository.NewHabitLogRepository(db.DB)
 		executeHabitUseCase := usecase.NewExecuteHabitUseCase(habitRepository, habitLogRepository)
-		input := usecase.ExecuteHabitInputDTO{ID: ID, ExecutedAt: time.Now()}
+		input := usecase.ExecuteHabitInputDTO{ID: ID, ExecutedAt: executedAt}
 
 		output, err := executeHabitUseCase.Execute(input)
 		if err != nil {
 			return fmt.Errorf("Error executing habit %v. Error: %v", ID, err)
 		}
 
-		fmt.Printf("\033[32m✔\033[0m Hábito '%s' marcado como concluído hoje!\n", output.HabitName)
+		fmt.Printf("\033[32m✔\033[0m Hábito '%s' marcado como concluído para o dia %v!\n", output.HabitName, getDateAsPTBR(output.ExecutedAt))
 		return nil
 	},
 }
 
+const layoutBR = "02/01/2006"
+
+func getExecutedDate(executedDate string) (time.Time, error) {
+	if len(executedDate) == 0 {
+		return time.Now(), nil
+	}
+
+	t, err := time.ParseInLocation(layoutBR, executedDate, time.Local)
+	if err != nil {
+		return time.Time{}, errors.New("Formato invalido de data. Data precisa ter esse padrao 27/03/2006")
+	}
+
+	return t, nil
+}
+
+func getDateAsPTBR(t time.Time) string {
+	return t.Format(layoutBR)
+}
+
 func init() {
 	rootCmd.AddCommand(executeCmd)
+	executeCmd.Flags().StringVarP(&executedDate, "include-date", "i", "", "Add execution to a specific date")
 }

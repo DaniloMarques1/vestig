@@ -12,5 +12,5 @@ type HabitRepository interface {
 type HabitLogRepository interface {
 	Save(*HabitLog) error
 	Find(int64) ([]HabitLog, error)
-	FindExecutionAt(time.Time) (bool, error)
+	FindExecutionAt(int64, time.Time) (bool, error)
 }
