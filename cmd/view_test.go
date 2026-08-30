@@ -8,9 +8,9 @@ func TestGetDaysLabel(t *testing.T) {
 		streak int64
 		want   string
 	}{
-		{name: "zero streak", streak: 0, want: "dias"},
-		{name: "singular streak", streak: 1, want: "dia"},
-		{name: "plural streak", streak: 2, want: "dias"},
+		{name: "zero streak", streak: 0, want: "days"},
+		{name: "singular streak", streak: 1, want: "day"},
+		{name: "plural streak", streak: 2, want: "days"},
 	}
 
 	for _, tt := range tests {

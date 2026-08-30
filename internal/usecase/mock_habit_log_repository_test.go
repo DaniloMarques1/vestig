@@ -9,7 +9,7 @@ import (
 type mockHabitLogRepository struct {
 	saveFn            func(*domain.HabitLog) error
 	findFn            func(int64) ([]domain.HabitLog, error)
-	findExecutionAtFn func(time.Time) (bool, error)
+	findExecutionAtFn func(int64, time.Time) (bool, error)
 	called            bool
 }
 
@@ -29,10 +29,10 @@ func (mock *mockHabitLogRepository) Find(habitID int64) ([]domain.HabitLog, erro
 	return mock.findFn(habitID)
 }
 
-func (mock *mockHabitLogRepository) FindExecutionAt(dt time.Time) (bool, error) {
+func (mock *mockHabitLogRepository) FindExecutionAt(habitId int64, dt time.Time) (bool, error) {
 	if mock.findExecutionAtFn == nil {
 		return false, nil
 	}
 	mock.called = true
-	return mock.findExecutionAtFn(dt)
+	return mock.findExecutionAtFn(habitId, dt)
 }

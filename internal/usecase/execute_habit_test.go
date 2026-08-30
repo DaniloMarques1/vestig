@@ -17,7 +17,7 @@ func TestExecuteHabitUseCase_Execute(t *testing.T) {
 			return &domain.Habit{ID: id, Name: "Beber Água"}, nil
 		}}
 		logRepo := &mockHabitLogRepository{
-			findExecutionAtFn: func(dt time.Time) (bool, error) {
+			findExecutionAtFn: func(habitId int64, dt time.Time) (bool, error) {
 				if !dt.Equal(executedAt) {
 					t.Errorf("expected execution date %v, got %v", executedAt, dt)
 				}
@@ -49,7 +49,7 @@ func TestExecuteHabitUseCase_Execute(t *testing.T) {
 		habitRepo := &mockHabitRepository{findByIdFn: func(int64) (*domain.Habit, error) {
 			return &domain.Habit{ID: 1, Name: "Ler Livro"}, nil
 		}}
-		logRepo := &mockHabitLogRepository{findExecutionAtFn: func(time.Time) (bool, error) {
+		logRepo := &mockHabitLogRepository{findExecutionAtFn: func(habitId int64, dt time.Time) (bool, error) {
 			return false, errCheck
 		}}
 
