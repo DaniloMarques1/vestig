@@ -13,8 +13,8 @@ const layoutBR = "02/01/2006"
 
 var rootCmd = &cobra.Command{
 	Use:   "vestig",
-	Short: "Vestig - Gerenciador de hábitos e rastros diários via terminal",
-	Long:  `Vestig (do latim 'vestigium': rastro/pegada) é uma CLI para rastrear seus hábitos diários.`,
+	Short: "Vestig - Daily habit and trail manager for the terminal",
+	Long:  "Vestig (from Latin 'vestigium': trail/footprint) is a CLI for tracking your daily habits.",
 }
 
 func Execute() error {
@@ -27,7 +27,7 @@ func init() {
 }
 
 func initConfig() {
-	// Inicialização do SQLite e diretórios da aplicação
+	// Init sqlite dir
 	configDir, err := os.UserConfigDir()
 	if err != nil {
 		log.Fatal(err)
