@@ -19,7 +19,7 @@ jobs:
       - name: Golang environment
         uses: actions/setup-go@v7
         with:
-          go-version-file: 'go.mod',
+          go-version-file: 'go.mod'
           cache: true
         
       - name: Run tests
