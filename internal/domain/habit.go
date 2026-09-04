@@ -35,3 +35,7 @@ func NewHabit(name string) (*Habit, error) {
 func (h *Habit) MarkAsInactive() {
 	h.IsActive = false
 }
+
+func (h *Habit) UpdateName(name string) {
+	h.Name = name
+}
