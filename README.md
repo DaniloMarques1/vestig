@@ -57,5 +57,3 @@ View detailed execution history, current streak stats, and a weekly activity gri
 ---
 
 ## 🚧 Pending Features / Roadmap
-
-- [ ] **`edit` command**: Ability to rename existing habits.
