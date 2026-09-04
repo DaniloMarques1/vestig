@@ -1,8 +1,6 @@
 package usecase
 
 import (
-	"strings"
-
 	"danilo.marques/vestig/internal/domain"
 )
 
@@ -26,18 +24,16 @@ func NewEditHabitUseCase(repository domain.HabitRepository) *EditHabitUseCase {
 }
 
 func (e *EditHabitUseCase) Execute(input *EditHabitInputDTO) (*EditHabitOutputDTO, error) {
-	name := strings.TrimSpace(input.Name)
-	if name == "" {
-		return nil, domain.ErrEmptyHabitName
-	}
-
 	habit, err := e.repository.FindById(input.HabitID)
 	if err != nil {
 		return nil, err
 	}
 
 	oldName := habit.Name
-	habit.UpdateName(name)
+	if err := habit.UpdateName(input.Name); err != nil {
+		return nil, err
+	}
+
 	if err := e.repository.Update(habit); err != nil {
 		return nil, err
 	}

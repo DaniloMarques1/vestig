@@ -75,3 +75,31 @@ func TestNewHabit(t *testing.T) {
 		}
 	})
 }
+
+func TestHabitUpdateName(t *testing.T) {
+	t.Run("should trim leading and trailing whitespaces from name", func(t *testing.T) {
+		habit := &Habit{Name: "Meditar"}
+
+		err := habit.UpdateName("   Correr no parque   ")
+
+		if err != nil {
+			t.Fatalf("expected nil error, got: %v", err)
+		}
+		if habit.Name != "Correr no parque" {
+			t.Errorf("expected name 'Correr no parque', got '%s'", habit.Name)
+		}
+	})
+
+	t.Run("should return ErrEmptyHabitName without changing the current name", func(t *testing.T) {
+		habit := &Habit{Name: "Meditar"}
+
+		err := habit.UpdateName("   ")
+
+		if !errors.Is(err, ErrEmptyHabitName) {
+			t.Errorf("expected ErrEmptyHabitName, got: %v", err)
+		}
+		if habit.Name != "Meditar" {
+			t.Errorf("expected name to remain 'Meditar', got '%s'", habit.Name)
+		}
+	})
+}

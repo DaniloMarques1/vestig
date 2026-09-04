@@ -20,9 +20,9 @@ type Habit struct {
 }
 
 func NewHabit(name string) (*Habit, error) {
-	trimmedName := strings.TrimSpace(name)
-	if trimmedName == "" {
-		return nil, ErrEmptyHabitName
+	trimmedName, err := validateHabitName(name)
+	if err != nil {
+		return nil, err
 	}
 
 	return &Habit{
@@ -36,6 +36,21 @@ func (h *Habit) MarkAsInactive() {
 	h.IsActive = false
 }
 
-func (h *Habit) UpdateName(name string) {
-	h.Name = name
+func (h *Habit) UpdateName(name string) error {
+	trimmedName, err := validateHabitName(name)
+	if err != nil {
+		return err
+	}
+
+	h.Name = trimmedName
+	return nil
+}
+
+func validateHabitName(name string) (string, error) {
+	trimmedName := strings.TrimSpace(name)
+	if trimmedName == "" {
+		return "", ErrEmptyHabitName
+	}
+
+	return trimmedName, nil
 }

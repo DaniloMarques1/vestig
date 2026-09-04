@@ -56,7 +56,15 @@ func TestEditHabitUseCase_Execute(t *testing.T) {
 	})
 
 	t.Run("should reject an empty habit name without updating", func(t *testing.T) {
-		repo := &mockHabitRepository{}
+		repo := &mockHabitRepository{
+			findByIdFn: func(int64) (*domain.Habit, error) {
+				return &domain.Habit{ID: 1, Name: "Beber Água"}, nil
+			},
+			updateFn: func(*domain.Habit) error {
+				t.Error("repository should not update a habit with an empty name")
+				return nil
+			},
+		}
 
 		output, err := NewEditHabitUseCase(repo).Execute(&EditHabitInputDTO{HabitID: 1, Name: "   "})
 
@@ -65,9 +73,6 @@ func TestEditHabitUseCase_Execute(t *testing.T) {
 		}
 		if output != nil {
 			t.Errorf("expected nil output, got: %+v", output)
-		}
-		if repo.called {
-			t.Error("repository should not have been called for an empty name")
 		}
 	})
 
